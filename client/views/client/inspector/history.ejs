@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>history_record</title>
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="/static/css/font.css">
+		<link rel="stylesheet" href="/static/css/weadmin.css">
+		<script type="text/javascript" src="/lib/layui/layui.js" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<!-- 顶部开始 -->
+		<div class="container" style="position: fixed;z-index: 9999;">
+			<div class="logo">
+					<a  href="/client" >
+						<i class="layui-icon layui-icon-left" style="font-size: 25px; color: #ffffff;"></i><br>
+					</a>
+			</div>
+			<ul class="layui-nav right" lay-filter="">
+				<li class="layui-nav-item">
+					<a style="font-size: 18px;">历史记录</a>
+				</li>
+			</ul>
+		</div>
+		<div style="height: 46px"></div>
+		<div style="padding: 20px; background-color: #F2F2F2;">
+			<% for(var i=0; i<options.length; i++) { %>
+				<div class="layui-card">
+					<div class="layui-card-header">任务计划名称: <%-options[i].name%></div>
+					<div class="layui-card-body">
+					生成日期: <%-options[i]._date%><br>
+					执行日期: <%-options[i]._time%><br>
+					任务状态: <%-options[i].state%><br>
+					执行人员: <%-options[i].person%><br>
+					任务评分: <%-options[i].scores%><br>
+					备注信息 : <%-options[i].notation%><br>
+					</div>
+			  </div>
+			<% } %>
+		</div>
+		<div class="page-content-bg"></div>
+		<!-- 右侧主体结束 -->
+		<!-- 中部结束 -->
+		<!-- 底部开始 -->
+		<div style="height: 81px;"></div>
+		<div class="footer">
+			<div class="copyright"></div>
+		</div>
+		<!-- 底部结束 -->
+		<script type="text/javascript">
+
+			layui.config({
+			  base: '/static/js/'
+			  ,version: '101100'
+			}).use('admin');
+			layui.use(['jquery','admin'], function(){
+				var $ = layui.jquery;
+			
+			});
+
+		</script>
+	</body>
+</html>

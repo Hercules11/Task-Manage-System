@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>个人信息页面</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/static/css/font.css">
+		<link rel="stylesheet" href="/static/css/weadmin.css">    
+  </head>
+  
+  <body>
+    <div class="weadmin-body" action="/admin/user/self_info" method="POST">
+        <form class="layui-form">
+            <input type="text" id="id" name="id" required="" hidden
+            autocomplete="off" value="<%-user.id%>">
+            <div class="layui-form-item">
+                <label for="username" class="layui-form-label">头像</label>
+                <div class="layui-input-inline">
+                    <img id="img" style="width:100px; height:100px;" src="<%-user.image_header%>" alt="">
+                </div>
+               
+            </div>
+          <div class="layui-form-item">
+              <label for="username" class="layui-form-label">
+                  <span class="we-red">*</span>用户名
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="username" name="username" required="" lay-verify="required"
+                  autocomplete="off" value="<%-user.username%>" class="layui-input">
+              </div>
+              <!-- <div class="layui-form-mid layui-word-aux">
+                <span class="we-red">*</span>此用户名不可修改
+              </div> -->
+          </div>
+          <div class="layui-form-item">
+            <label for="L_pass" class="layui-form-label">
+                <span class="we-red">*</span>密码
+            </label>
+            <div class="layui-input-inline">
+                <input type="password" id="L_pass" name="password" required="" lay-verify="pass"
+                autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                6到16个字符
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="L_repass" class="layui-form-label">
+                <span class="we-red">*</span>确认密码
+            </label>
+            <div class="layui-input-inline">
+                <input type="password" id="L_repass" name="repass" required="" lay-verify="repass"
+                autocomplete="off" class="layui-input">
+            </div>
+        </div>
+          <div class="layui-form-item">
+              <label for="phone" class="layui-form-label">
+                  <span class="we-red">*</span>手机号
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" value="<%-user.mobile%>" id="phone" name="mobile" required="" lay-verify="phone"
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="L_email" class="layui-form-label">
+                  <span class="we-red">*</span>邮箱
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" value="<%-user.email%>" id="L_email" name="email" required="" lay-verify="email"
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label"><span class="we-red">*</span>角色</label>
+            <div class="layui-input-block">
+              <%for(let i=0;i<role.length;i++){ %>  
+                      <input type="radio" name="role_id" 
+                      value="<%-role[i].id%>" 
+                      lay-skin="primary" 
+                      title="<%-role[i].role_name%>"
+                      <% if(role[i].id==user.role_id){ %> 
+                          checked="true"
+                      <%}%>
+                      >
+              <%}%>
+              
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="L_pass" class="layui-form-label">
+                <span class="we-red"></span>上传头像
+            </label>
+            <div class="layui-input-inline">
+                <button type="button" class="layui-btn" id="img_file">
+                        <i class="layui-icon">&#xe67c;</i>上传图片
+                </button>
+            </div>
+        </div>
+          <div class="layui-form-item">
+              <label for="L_repass" class="layui-form-label">
+              </label>
+              <button  class="layui-btn" lay-filter="add" lay-submit="">
+                  确认
+              </button>
+          </div>
+      </form>
+    </div>
+		<script src="/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript">
+    	layui.extend({
+				admin: '{/}/static/js/admin'
+			});
+	    layui.use(['form','layer','admin','upload','jquery'], function(){
+	      var form = layui.form,
+	      	admin = layui.admin,
+            layer = layui.layer,
+            upload = layui.upload;
+            var $ = layui.jquery
+            
+          //自定义验证规则
+          form.verify({
+            nikename: function(value){
+              if(value.length < 5){
+                return '昵称至少得5个字符啊';
+              }
+            }
+            ,pass: [/(.+){6,12}$/, '密码必须6到12位']
+            ,repass: function(value){
+                if($('#L_pass').val()!=$('#L_repass').val()){
+                    return '两次密码不一致';
+                }
+            }
+          });
+
+          //监听提交
+          form.on('submit(add)', function(data){
+            console.log(data);
+            //发异步，把数据提交给php
+            //用ajax提交数据
+            $.ajax({
+                url : "/admin/user/self_info",
+                method : "post",
+                data : data.field
+            }).then(function(){
+                layer.alert("修改成功", {icon: 6},function () {
+                // 获得frame索引
+                var index = parent.layer.getFrameIndex(window.name);
+                //关闭当前frame
+                parent.layer.close(index);
+                //将iframe的上一层进行刷新
+                window.parent.location.reload()
+            });
+            })
+            
+            return false;
+          });
+          //执行实例,绑定按钮元素
+          var uploadInst = upload.render({
+                elem: '#img_file' //绑定元素
+                ,url: '/admin/user/selfImgUpload', //上传接口,接收图片的位置
+                field:"img_file",
+                done: function(res){
+                //上传完毕回调
+                    console.log(res)
+                    $('#img').attr('src',res.imgUrl)
+                }
+                ,error: function(){
+                //请求异常回调
+                }
+            });
+          
+        });
+    </script>
+  </body>
+
+</html>

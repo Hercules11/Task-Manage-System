@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>计划列表页</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, equip-scalable=0">
+		<link rel="stylesheet" href="/static/css/font.css">
+		<link rel="stylesheet" href="/static/css/weadmin.css">
+	</head>
+
+	<body>
+		<div class="weadmin-nav">
+			<span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">任务管理</a>
+        <a>
+          <cite>维护计划</cite></a>
+      </span>
+			<a class="layui-btn layui-btn-sm" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+				<i class="layui-icon" style="line-height:30px">ဂ</i></a>
+		</div>
+		<div class="weadmin-body">
+			<div class="layui-row">
+				<div class="layui-form layui-col-md12 we-search">
+					<div class="layui-inline">
+						<input type="text" name="task_name" placeholder="请输入计划名称" autocomplete="off" class="layui-input">
+					</div>
+                    <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+                    <button class="layui-btn" onclick="WeAdminShow('添加清单','/admin/task/taskList/add_taskList')"><i class="layui-icon">&#xe61f;</i>添加</button>
+                    <button class="layui-btn" onclick="exportAll()"><i class="layui-icon">&#xe67d;</i>批量导出</button>
+                    <button class="layui-btn layui-btn-danger" onclick="del_all()"><i class="layui-icon">&#xe640;</i>批量删除</button>				
+				</div>
+			</div>
+			<table id="taskList" lay-filter="test" class="layui-table">
+				
+			</table>
+		</div>
+		<script src="/lib/layui/layui.js" charset="utf-8"></script>
+        <script src="/static/js/eleDel.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript" >
+			layui.use('table', function(){
+  		var table = layui.table;				
+  		//第一个实例
+  		table.render({
+    	elem: '#taskList'
+    	,height: 300
+    	,url: '/admin/task/taskList/api/taskList' //数据接口
+		,page: true //开启分页
+		,limit: 5
+		,limits: [5, 10, 20]
+		,cols: [[ 
+			//表头
+		{type:'checkbox',fixed: 'left'}		
+      ,{field: 'id', title: 'ID',  fixed: 'left', sort: true, width:60 }
+      ,{field: 'name', title: '计划名称', sort: true}
+      ,{field: 'start', title: '计划开始时间',sort: true, templet: "<div>{{layui.util.toDateString(d.start)}}</div>"}
+      ,{field: 'end', title: '计划结束时间',sort: true, templet: "<div>{{layui.util.toDateString(d.end)}}</div>"} 
+      ,{field: 'init', title: '更新时间',sort: true, templet: "<div>{{layui.util.toDateString(d.init)}}</div>"}
+      ,{field: 'person', title: '实施人员',sort: true}
+      ,{field: 'inspector', title: '检查人员',sort: true}
+      ,{field: 'operate', title: '操作', templet: '#operate'}
+    ]]
+  });
+  
+});
+		</script>
+		<script type="text/html" id="operate">
+			<a title="编辑" onclick="WeAdminShow('编辑','/admin/task/taskList/editTask?id={{d.id}}')" href="javascript:;">
+				<i class="layui-icon">&#xe642;</i>编辑
+			</a>
+			<a title="删除" onclick="task_del(this,'{{d.id}}')" href="javascript:;">
+				<i class="layui-icon">&#xe640;</i>删除
+			</a>
+		</script>
+		<style>
+			.layui-table tr td, .layui-table tr td div{
+				height: 25px !important;
+			}
+		</style>
+		<script>
+			layui.use(['table','jquery','layer'], function(){
+			  let layer = layui.layer;
+			  let $ = layui.jquery;
+			/*用户-删除*/
+			window.task_del = function (obj, id) {
+			layer.confirm('确认要删除吗？', function(index) {
+			//发异步删除数据
+			$.get('taskList/del_task?equip_id='+id).then(()=>{
+				layer.msg('已删除!', {
+				icon: 1,
+				time: 1000
+						});
+						setTimeout(()=>{
+							location.reload()
+						},1000)
+					})
+				});
+			}
+		})
+		</script>
+	</body>
+
+</html>

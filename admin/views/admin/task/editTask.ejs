@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>任务信息页面</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/static/css/font.css">
+		<link rel="stylesheet" href="/static/css/weadmin.css">    
+  </head>
+  
+  <body>
+    <div class="weadmin-body" action="/admin/task/taskList/editTask" method="POST">
+        <form class="layui-form">
+          <input type="text" id="id" name="id" required="" hidden
+            autocomplete="off" value="<%-editTask.id%>">            
+          <div class="layui-form-item">
+              <label for="name" class="layui-form-label" style="width: 130px;">
+                  <span class="we-red">*</span>计划名称
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="name" name="name" required="" lay-verify="required"
+                  autocomplete="off" value="<%-editTask.name%>" class="layui-input">
+              </div>
+            
+              <label for="start" class="layui-form-label" style="width: 130px;">
+                <span class="we-red">*</span>计划开始时间
+              </label>
+              <div class="layui-input-inline">
+                <input type="text" id="start" name="start" required="" lay-verify="required"
+                autocomplete="off" value="<%-editTask.start%>" class="layui-input date">
+              </div>
+            
+              <label for="end" class="layui-form-label" style="width: 130px;">
+                <span class="we-red">*</span>计划结束时间
+              </label>
+              <div class="layui-input-inline">
+                <input type="text" id="end" name="end" required="" lay-verify="required"
+                autocomplete="off" value="<%-editTask.end%>" class="layui-input date">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="init" class="layui-form-label" style="width: 130px;">
+                <span class="we-red">*</span>更新时间
+              </label>
+              <div class="layui-input-inline">
+                <input type="text" id="init" name="init" required="" lay-verify="required"
+                autocomplete="off" value="<%-editTask.init%>" class="layui-input date">
+              </div>
+            
+              <label for="person" class="layui-form-label" style="width: 130px;">
+                <span class="we-red">*</span>实施人员
+              </label>
+              <div class="layui-input-inline">
+                <input type="text" id="person" name="person" required="" lay-verify="required"
+                autocomplete="off" value="<%-editTask.person%>" class="layui-input">
+              </div>
+              <label for="inspector" class="layui-form-label" style="width: 130px;">
+                <span class="we-red">*</span>检查人员
+              </label>
+              <div class="layui-input-inline">
+                <input type="text" id="inspector" name="inspector" required="" lay-verify="required"
+                autocomplete="off" value="<%-editTask.inspector%>" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+            <label for="person" class="layui-form-label" style="width: 130px;">
+              <span class="we-red"></span>
+            </label>
+            <button class="layui-btn" lay-filter="add" lay-submit=""  >确认</button>
+          </div>
+      </form>
+      <!-- <script type="text/html" id="toolbarDemo">
+        <button  class="layui-btn"  lay-event="getCheckData">
+          确认1 
+       </button>
+      </script> -->
+      <table id="itemList" lay-filter="test" class="layui-table">
+      </table>
+      <table id="selectedItemList" lay-filter="test01" class="layui-table">
+      </table>
+    </div>
+    <script src="/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/html" id="toolbarDemo">
+      <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+      </div>
+    </script>    
+    <script type="text/html" id="operate">
+			<a title="删除" onclick="item_del(this,'{{d.item_id}}')" href="javascript:;">
+				<i class="layui-icon">&#xe640;</i>删除
+			</a>
+		</script>
+    <script type="text/javascript">
+    	layui.extend({
+				admin: '{/}/static/js/admin'
+			});
+	    layui.use(['form','layer','admin','upload','jquery','laydate','table'], function(){
+      window.item_del = function (obj, item_id) {
+			layer.confirm('确认要删除吗？', function(index) {
+			//发异步删除数据
+			$.get('delItem?item_id='+item_id).then(()=>{
+				layer.msg('已删除!', {
+				icon: 1,
+				time: 1000
+						});
+						setTimeout(()=>{
+							location.reload()
+						},1000)
+					})
+				});
+			}
+	      var form = layui.form,
+	      	admin = layui.admin,
+            layer = layui.layer,
+            table = layui.table,
+            laydate = layui.laydate,
+            upload = layui.upload,
+             $ = layui.jquery;
+      table.render({
+            elem: '#itemList'
+            ,toolbar: '#toolbarDemo'
+    	      ,height: 400
+    	      ,url: '/admin/task/taskList/api/itemList' //数据接口
+		        ,page: true //开启分页
+		        ,limit: 10
+		        ,limits: [10, 50, 100,500]
+		        ,cols: [[ 
+          {type:'checkbox',fixed: 'left'}		
+          ,{field: 'id', title: 'ID',  fixed: 'left', width:60,sort: true }
+          ,{field: 'name', title: '标准名称', sort: true}
+          ,{field: 'location', title: '部位名称' }
+          ,{field: 'standard', title: '标准'}
+          ,{field: 'state', title: '状态',width:150}
+          ,{field: 'method', title: '方法'}
+          ,{field: 'period', title: '执行周期',width:150}
+          // ,{field: 'person', title: '执行人'}
+          // ,{field: 'operate', title: '操作', templet: '#operate',width:200}
+                ]]
+            });
+        table.render({
+            elem: '#selectedItemList'
+            // ,toolbar: '#toolbarDemo'
+    	      ,height: 300
+    	      ,url: '/admin/task/taskList/api/selectedItemList?id=<%-editTask.id%>' //数据接口
+		        ,page: true //开启分页
+		        ,limit: 10
+		        ,limits: [10, 50, 100 ,500]
+		        ,cols: [[ 
+          {type:'checkbox',fixed: 'left'}		
+          ,{field: 'item_id', title: 'ID',  fixed: 'left', width:60,sort: true }
+          ,{field: 'name', title: '标准名称', sort: true}
+          ,{field: 'location', title: '部位名称' }
+          ,{field: 'standard', title: '标准'}
+          ,{field: 'state', title: '状态',width:150}
+          ,{field: 'method', title: '方法'}
+          ,{field: 'period', title: '执行周期',width:150}
+          // ,{field: 'person', title: '执行人'}
+          ,{field: 'operate', title: '操作', templet: '#operate',width:100}
+                ]]
+            });
+      table.on('toolbar(test)', function(obj){
+                var checkStatus = table.checkStatus(obj.config.id);
+                switch(obj.event){
+                case 'getCheckData':
+                var item_data = checkStatus.data;
+                var arr =[];//空数组要写在循环外，否则会被覆盖，妈的，学人家错误写法
+                for(var i=0;i<item_data.length;i++){                  
+                  arr.push(item_data[i].id)
+                };
+                // console.log(arr)
+              layer.alert(JSON.stringify(arr), {icon: 6},function () {
+                // 获得frame索引
+                var index = layer.getFrameIndex(window.name);
+                //关闭当前frame
+                layer.close(index);
+                //将iframe的上一层进行刷新
+                window.location.reload()
+            });
+                $.ajax({
+                    url : "/admin/task/taskList/addTaskItem?id=<%-editTask.id%>",
+                    method : "post",
+                    data : {data:JSON.stringify(arr)}
+                    });
+              break;
+              };
+          });
+            lay('.date').each(function(){
+                laydate.render({
+                  elem: this,
+                  type: 'datetime',
+                  trigger: 'click',
+                  format:'yyyy-MM-dd HH:mm:ss'
+                });
+              });
+          //监听提交
+          form.on('submit(add)', function(data){
+            console.log(data);
+            //用ajax提交数据
+            $.ajax({
+                url : "/admin/task/taskList/editTask",
+                method : "post",
+                data : data.field
+            }).then(function(){
+                layer.msg("编辑成功", {icon: 6});
+            })
+            return false;
+          });
+        })  
+    </script>
+    
+  </body>
+
+</html>

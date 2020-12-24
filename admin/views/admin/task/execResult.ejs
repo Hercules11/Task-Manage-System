@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>审查详情页</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, equip-scalable=0">
+		<link rel="stylesheet" href="/static/css/font.css">
+		<link rel="stylesheet" href="/static/css/weadmin.css">
+	</head>
+
+	<body>
+		<div class="weadmin-nav">
+			
+		</div>
+		<div class="weadmin-body">
+			<table id="examItem" lay-filter="test" class="layui-table">
+			</table>
+		</div>
+		<script src="/lib/layui/layui.js" charset="utf-8"></script>
+        <script src="/static/js/eleDel.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript" >
+			layui.use('table', function(){
+  		var table = layui.table;				
+  		//第一个实例
+  		table.render({
+    	elem: '#examItem'
+    	,height: 400
+    	,url: '/admin/task/taskExec/api/execItem?id=<%-signal%>&date=<%-finish_time%>' //数据接口
+		,cols: [[ 
+			//表头 
+    {field: 'name', title: '任务计划名称' }
+      ,{field: 'location', title: '部位/部件'}
+      ,{field: 'standard', title: '标准'}      
+	  ,{field: 'state', title: '状态'}
+	  ,{field: 'method', title: '方法'}
+	  ,{field: 'period', title: '周期'}
+    ]]
+  });
+  
+});
+		</script>
+		<style>
+			.layui-table tr td, .layui-table tr td div{
+				height: 25px !important;
+			}
+		</style>
+		<script>
+			layui.use(['table','jquery','layer'], function(){
+			  let layer = layui.layer;
+			  let $ = layui.jquery;
+			/*用户-删除*/
+			window.task_del = function (obj, id) {
+			layer.confirm('确认要删除吗？', function(index) {
+			//发异步删除数据
+			$.get('taskList/del_task?equip_id='+id).then(()=>{
+				layer.msg('已删除!', {
+				icon: 1,
+				time: 1000
+						});
+						setTimeout(()=>{
+							location.reload()
+						},1000)
+					})
+				});
+			}
+		})
+		</script>
+	</body>
+
+</html>

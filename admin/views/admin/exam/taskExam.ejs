@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>任务审查页</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, equip-scalable=0">
+		<link rel="stylesheet" href="/static/css/font.css">
+		<link rel="stylesheet" href="/static/css/weadmin.css">
+	</head>
+
+	<body>
+		<div class="weadmin-nav">
+			<span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">任务审查</a>
+        <a>
+          <cite>模块1</cite></a>
+      </span>
+			<a class="layui-btn layui-btn-sm" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+				<i class="layui-icon" style="line-height:30px">ဂ</i></a>
+		</div>
+		<div class="weadmin-body">
+			<div class="layui-row">
+				<div class="layui-form layui-col-md12 we-search">
+					<div class="layui-inline">
+						<input type="text" name="task_name" placeholder="请输入计划名称" autocomplete="off" class="layui-input">
+					</div>
+                    <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+                    <button class="layui-btn" onclick="exportAll()"><i class="layui-icon">&#xe67d;</i>批量导出</button>			
+				</div>
+			</div>
+			<table id="taskExam" lay-filter="test" class="layui-table">
+			</table>
+		</div>
+		<script src="/lib/layui/layui.js" charset="utf-8"></script>
+        <script src="/static/js/eleDel.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript" >
+			layui.use('table', function(){
+  		var table = layui.table;				
+  		//第一个实例
+  		table.render({
+    	elem: '#taskExam'
+    	,height: 400
+    	,url: '/admin/exam/taskExam/api/taskExam' //数据接口
+		,page: true //开启分页
+		,limit: 10
+		,limits: [10, 20, 50]
+		,cols: [[ 
+			//表头
+		{type:'checkbox',fixed: 'left'}		
+      ,{field: 'id', title: 'ID',  fixed: 'left', width:60 }
+      ,{field: 'name', title: '计划名称' }
+      ,{field: '_date', title: '生成日期', sort: true,  templet: "<div>{{layui.util.toDateString(d._date)}}</div>"}
+	//   ,{field: 'number', title: '设备编号',}
+      ,{field: 'person', title: '实施人'}
+	  ,{field: 'inspector', title: '检查人'}
+      ,{field: '_time', title: '检查时间', sort: true }
+      ,{field: 'state', title: '任务状态'}	  
+      ,{field: 'scores', title: '综合评分', sort: true}      
+      ,{field: 'operate', title: '操作', templet: '#operate'}
+	  ,{field: 'notation', title: '备注信息'}
+    ]]
+  });
+  
+});
+		</script>
+		<script type="text/html" id="operate">								
+			<a title="查看" onclick="WeAdminShow('详情信息页','/admin/exam/taskExam/examItem?date={{d._time}}&name={{d.name}}')" href="javascript:;">
+				<i class="layui-icon">&#xe642;</i>查看详情
+			</a>
+		</script>
+		<style>
+			.layui-table tr td, .layui-table tr td div{
+				height: 25px !important;
+			}
+		</style>
+		<script>
+			layui.use(['table','jquery','layer'], function(){
+			  let layer = layui.layer;
+			  let $ = layui.jquery;
+			/*用户-删除*/
+			window.task_del = function (obj, id) {
+			layer.confirm('确认要删除吗？', function(index) {
+			//发异步删除数据
+			$.get('taskList/del_task?equip_id='+id).then(()=>{
+				layer.msg('已删除!', {
+				icon: 1,
+				time: 1000
+						});
+						setTimeout(()=>{
+							location.reload()
+						},1000)
+					})
+				});
+			}
+		})
+		</script>
+	</body>
+
+</html>

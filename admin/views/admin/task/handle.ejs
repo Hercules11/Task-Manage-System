@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>任务执行详情页</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, equip-scalable=0">
+		<link rel="stylesheet" href="/static/css/font.css">
+		<link rel="stylesheet" href="/static/css/weadmin.css">
+	</head>
+
+	<body>
+		<div class="weadmin-nav">
+			<h3>任务计划名称: <%- options.name %>	</h3>		
+		</div>
+		<div class="weadmin-body">
+                <h3 style="margin-bottom: 20px;margin-left: 50px;">发现时间: <%-options._date %></h3>
+				<h3 style="margin-bottom: 20px;margin-left: 50px;">发现人  : <%-options.person %></h3>
+                <h3 style="margin-bottom: 20px;margin-left: 50px;">故障部位: <%-options.location %></h3>
+				<h3 style="margin-bottom: 20px;margin-left: 50px;">故障描述: <%-options.description %></h3>				
+				<form class="layui-form">				
+					<div class="layui-form-item">
+						<label for="tech" class="layui-form-label" style="width:100px;margin-bottom: 10px;">
+							<span class="we-red">*</span>指定维修人员
+						</label>
+						<div class="layui-input-inline">
+							<input type="text" value="" id="tech" name="tech" required=""
+							autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+							<label for="ensure" class="layui-form-label" style="width:100px;margin-bottom: 10px;">
+							</label>
+							<button  class="layui-btn" lay-filter="add" lay-submit="">
+								确认
+							</button>
+					</div>
+				</form>
+		</div>
+		<script src="/lib/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" >
+			//缓存一直清除不了 ，也是很麻烦
+			//不是缓存的问题，而是ejs语句不能嵌套 ，且这个注释没用啊
+			layui.extend({
+				admin: '{/}/static/js/admin'
+			});
+	    layui.use(['form','layer','admin','jquery'], function(){
+	      var form = layui.form,
+	      	admin = layui.admin,
+            layer = layui.layer,
+            $ = layui.jquery            
+
+          //监听提交
+          form.on('submit(add)', function(data){
+            $.ajax({
+                url : "/admin/task/taskBreak/handle?id=<%-options.id%>",
+                method : "post",
+                data : data.field
+            }).then(function(){
+                layer.alert("添加成功", {icon: 6},function () {
+                // 获得frame索引
+                var index = parent.layer.getFrameIndex(window.name);
+                //关闭当前frame
+                parent.layer.close(index);
+                //将iframe的上一层进行刷新
+                window.parent.location.reload()
+            });
+            })
+            
+            return false;
+          });
+		})
+		</script>
+	</body>
+
+</html>

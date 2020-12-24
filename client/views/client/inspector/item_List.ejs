@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>task</title>
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="/static/css/font.css">
+		<link rel="stylesheet" href="/static/css/weadmin.css">
+		<script type="text/javascript" src="/lib/layui/layui.js" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<!-- 顶部开始 -->
+		<div class="container" style="position: fixed;z-index: 9999;">
+			<div class="logo">
+					<a  href="/client" >
+						<i class="layui-icon layui-icon-left" style="font-size: 25px; color: #ffffff;"></i><br>
+					</a>
+			</div>
+			<ul class="layui-nav right" lay-filter="">
+				<li class="layui-nav-item">
+					<a style="font-size: 18px;">执行项目</a>
+				</li>
+			</ul>
+		</div>
+		<div style="height: 46px;"></div>
+		<div style="padding: 20px; background-color: #F2F2F2;">
+	<form class="layui-form">				
+		<div class="layui-form-item">
+			<% for(var i=0; i<options.length; i++) { %>
+				<div class="layui-card">
+					<div class="layui-card-header"><%-i+1%>.任务计划名称: <%-options[i].name%></div>
+					<div class="layui-card-body">
+						<h3 style="margin-bottom: 5px;margin-left: 0px;">维护部位: <%-options[i].location%></h3>
+						<h3 style="margin-bottom: 5px;margin-left: 0px;">维护标准: <%-options[i].standard%></h3>
+						<h3 style="margin-bottom: 5px;margin-left: 0px;">设备状态: <%-options[i].state%></h3>
+						<h3 style="margin-bottom: 5px;margin-left: 0px;">维护方法: <%-options[i].method%></h3>
+						<h3 style="margin-bottom: 5px;margin-left: 0px;">检查评分: </h3>
+						<input type="text" placeholder="请输入检查评分，0-100" value="" id="<%-options[i].id%>" name="<%-options[i].id%>" required="" lay-verify="required|scores"
+						autocomplete="off" class="layui-input">
+					</div>
+			  </div>
+			<% } %>
+		</div>
+		<div class="layui-form-item">
+			<label for="ensure" class="layui-form-label" style="width:100px;margin-bottom: 10px;">
+			</label>
+			<button  class="layui-btn" lay-filter="add" lay-submit="">
+					确认
+			</button>
+		</div>
+	</form>	
+		</div>
+
+		<div class="page-content-bg"></div>
+		<!-- 右侧主体结束 -->
+		<!-- 中部结束 -->
+		<!-- 底部开始 -->
+		<div style="height: 81px;"></div>
+		<div class="footer">
+			<div style="padding: 5px 30px; ">
+				<a onclick="WeAdminShow('提交工单','/client/role/inspector/task/finish?name=<%-params%>')" class="layui-btn">快速提交</a>
+				<a onclick="WeAdminShow('注销工单','/client/role/inspector/task/destroy?name=<%-params%>')" class="layui-btn layui-btn-normal">注销工单</a>
+				<a onclick="WeAdminShow('隐患登记','/client/role/inspector/task/enroll?name=<%-params%>')" class="layui-btn layui-btn-warm">隐患登记</a>
+			</div>
+			<div class="copyright"></div>
+		</div>
+		<!-- 底部结束 -->
+		<script type="text/javascript">
+
+			layui.config({
+			  base: '/static/js/'
+			  ,version: '101100'
+			}).use('admin');
+			layui.use(['jquery','admin','layer','form'], function(){
+			var $ = layui.jquery,
+			form = layui.form,
+			admin = layui.admin;
+
+			form.verify({
+            scores: [/^(?:[1-9]?\d|100)$/,'分数介于0-100之间']
+          });
+          //监听提交,正则字符串直接搜素即可
+          form.on('submit(add)', function(data){
+            $.ajax({
+                url : "/client/role/inspector/task/scores?name=<%-params%>",
+                method : "post",
+                data : data.field
+            }).then(function(){				
+					//提示层
+                    layer.msg('评分成功');
+			})            
+            return false;
+		  });
+		  
+			});
+		</script>
+		
+	</body>
+</html>

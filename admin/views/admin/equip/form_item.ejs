@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>清单详情页面</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/static/css/font.css">
+		<link rel="stylesheet" href="/static/css/weadmin.css">    
+  </head>
+  <body>
+    <div class="weadmin-body" action="/admin/equip/formList/edit_form" method="POST">
+        <form class="layui-form">
+            <input type="text" id="id" name="id" required="" hidden
+            autocomplete="off" value="<%-sub_item.id%>">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label for="name" class="layui-form-label">
+                        <span class="we-red">*</span>标准名称
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="name" name="name" required="" lay-verify="required"
+                        autocomplete="off" value="<%-sub_item.name%>" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label for="model" class="layui-form-label">
+                        <span class="we-red">*</span>适用型号
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="model" name="model" required="" lay-verify="required"
+                        autocomplete="off" value="<%-sub_item.model%>" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label for="person" class="layui-form-label">
+                        <span class="we-red">*</span>制定人
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="person" name="person" required="" lay-verify="required"
+                        autocomplete="off" value="<%-sub_item.person%>" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label for="_date" class="layui-form-label">
+                        <span class="we-red">*</span>更新时间
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="_date" name="_date" required="" lay-verify="required"
+                        autocomplete="off" value="<%-sub_item._date%>" class="layui-input">
+                    </div>
+                </div>
+            </div>         
+        </form>        
+        <label for="L_repass" class="layui-form-label">
+        </label>
+        <button  class="layui-btn" lay-filter="add" lay-submit="">确认</button>
+        <button class="layui-btn" onclick="WeAdminShow('添加子项目','/admin/equip/formList/addSubItem?base_id=<%-sub_item.id%>')"><i class="layui-icon">&#xe61f;</i>添加</button>
+        <button class="layui-btn" onclick="exportAll()"><i class="layui-icon">&#xe67d;</i>批量导出</button>
+        <button class="layui-btn layui-btn-danger" onclick="del_all()"><i class="layui-icon">&#xe640;</i>批量删除</button> 
+        <table id="itemList" lay-filter="test" class="layui-table">
+        </table>
+    </div>
+		<script src="/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript">
+    //不能在表单中用弹窗
+    	layui.extend({
+				admin: '{/}/static/js/admin'
+			});
+	    layui.use(['form','layer','admin','upload','jquery','laydate','table'], function(){
+	      var form = layui.form,
+	      	admin = layui.admin,
+            layer = layui.layer,
+            laydate = layui.laydate,
+            table = layui.table,
+            upload = layui.upload;
+            var $ = layui.jquery
+            //第一个实例
+  		table.render({
+    	elem: '#itemList'
+    	,height: 300
+    	,url: '/admin/equip/formList/api/itemList?id=<%-sub_item.id%>' //数据接口
+		,page: true //开启分页
+		,limit: 5
+		,limits: [5, 10, 20]
+		,cols: [[ 
+			//表头
+		{type:'checkbox',fixed: 'left'}		
+      ,{field: 'id', title: 'ID',  fixed: 'left', width:60 }
+      ,{field: 'location', title: '部位名称' }
+      ,{field: 'standard', title: '标准'}
+      ,{field: 'state', title: '状态'}
+      ,{field: 'method', title: '方法'}
+      ,{field: 'period', title: '执行周期'}
+      ,{field: 'person', title: '执行人'}
+      ,{field: 'operate', title: '操作', templet: '#operate',width:200}
+                ]]
+            });
+            
+            laydate.render({
+            elem: '#_date', //指定元素
+            type: 'date',
+            trigger: 'click'
+            });
+          //监听提交
+          form.on('submit(add)', function(data){
+            console.log(data);
+            //发异步，把数据提交给php
+            //用ajax提交数据
+            $.ajax({
+                url : "/admin/equip/formList/edit_form",
+                method : "post",
+                data : data.field
+            }).then(function(){
+                layer.alert("修改成功", {icon: 6},function () {
+                // 获得frame索引
+                var index = parent.layer.getFrameIndex(window.name);
+                //关闭当前frame
+                parent.layer.close(index);
+                //将iframe的上一层进行刷新
+                window.parent.location.reload()
+            });
+            })
+            return false;
+          });
+          //执行实例,绑定按钮元素
+          var uploadInst = upload.render({
+                elem: '#img_file' //绑定元素
+                ,url: '/admin/equip/equipList/imgUpload', //上传接口,接收图片的位置
+                field:"img_file",
+                done: function(res){
+                //上传完毕回调
+                    // console.log(res)
+                    // $('#img').attr('src',res.imgUrl)
+                }
+                ,error: function(){
+                //请求异常回调
+                }
+            });          
+        });
+    </script>
+    <script type="text/html" id="operate">
+        <a title="编辑" onclick="WeAdminShow('编辑','/admin/equip/formList/edit_item?id={{d.id}}')" href="javascript:;">
+            <i class="layui-icon">&#xe642;</i>编辑
+        </a>
+        <a title="删除" onclick="item_del(this,'{{d.id}}')" href="javascript:;">
+            <i class="layui-icon">&#xe640;</i>删除
+        </a>
+    </script>
+  </body>
+
+</html>

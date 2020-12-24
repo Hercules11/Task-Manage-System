@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>提交信息页</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, equip-scalable=0">
+		<link rel="stylesheet" href="/static/css/font.css">
+		<link rel="stylesheet" href="/static/css/weadmin.css">
+	</head>
+
+	<body>
+		<div class="weadmin-nav">
+			<h3>任务计划名称: <%-name %>	</h3>		
+		</div>
+		<div class="weadmin-body">		
+				<form class="layui-form">
+					<input type="text" value="已完成"" id="state" name="state" required=""
+							autocomplete="off" hidden>
+							<input type="text" value="<%-name %>" id="task" name="task" required=""
+							autocomplete="off" hidden>
+					<div class="layui-form-item">
+						<label for="_time" class="layui-form-label" >
+							<span class="we-red"></span>完成时间
+						</label>
+						<div class="layui-input-inline">
+							<input type="text" value="<%-current_time%>" id="_time" name="_time" required=""
+							autocomplete="off" class="layui-input">
+						</div>
+					</div>						
+					<div class="layui-form-item">
+							<label for="ensure" class="layui-form-label" >
+							</label>
+							<button  class="layui-btn" lay-filter="add" lay-submit="">
+								确认提交
+							</button>
+					</div>
+				</form>
+		</div>
+		<script src="/lib/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" >
+			//缓存一直清除不了 ，也是很麻烦
+			//不是缓存的问题，而是ejs语句不能嵌套 ，且这个注释没用啊
+			layui.extend({
+				admin: '{/}/static/js/admin'
+			});
+	    layui.use(['form','layer','admin','jquery'], function(){
+	      var form = layui.form,
+	      	admin = layui.admin,
+            layer = layui.layer,
+            $ = layui.jquery            
+
+          //监听提交
+          form.on('submit(add)', function(data){
+            $.ajax({
+                url : "/client/role/worker/task/finish?name=<%-params%>&time=<%-current_time%>",
+                method : "post",
+                data : data.field
+            }).then(function(){
+                layer.alert("提交成功", {icon: 6},function () {
+                // 获得frame索引
+                var index = parent.layer.getFrameIndex(window.name);
+                //关闭当前frame
+                parent.layer.close(index);
+                //将iframe的上一层进行刷新
+                window.parent.location.reload()
+            });
+            })
+            
+            return false;
+          });
+		})
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>任务信息页面</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/static/css/font.css">
+		<link rel="stylesheet" href="/static/css/weadmin.css">    
+  </head>
+  
+  <body>
+    <div class="weadmin-body" action="/admin/task/taskList/add_taskList" method="POST">
+        <form class="layui-form">            
+          <div class="layui-form-item">
+            
+              <label for="name" class="layui-form-label" style="width:130px">
+                  <span class="we-red">*</span>计划名称
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="name" name="name" required="" lay-verify="required"
+                  autocomplete="off" value="" class="layui-input">
+              </div>
+            
+            
+              <label for="start" class="layui-form-label" style="width:130px">
+                <span class="we-red">*</span>计划开始时间
+              </label>
+              <div class="layui-input-inline">
+                <input type="text" id="start" name="start" required="" lay-verify="required"
+                autocomplete="off" value="" class="layui-input date">
+              </div>
+            
+          </div>
+          <div class="layui-form-item">
+            
+              <label for="end" class="layui-form-label" style="width:130px">
+                <span class="we-red">*</span>计划结束时间
+              </label>
+              <div class="layui-input-inline">
+                <input type="text" id="end" name="end" required="" lay-verify="required"
+                autocomplete="off" value="" class="layui-input date">
+              </div>
+            
+            
+              <label for="init" class="layui-form-label" style="width:130px">
+                <span class="we-red">*</span>更新时间
+              </label>
+              <div class="layui-input-inline">
+                <input type="text" id="init" name="init" required="" lay-verify="required"
+                autocomplete="off" value="" class="layui-input date">
+              </div>
+            
+          </div>
+          <div class="layui-form-item">          
+           
+              <label for="person" class="layui-form-label" style="width:130px">
+                <span class="we-red">*</span>实施人员
+              </label>
+              <div class="layui-input-inline">
+                <input type="text" id="person" name="person" required="" lay-verify="required"
+                autocomplete="off" value="" class="layui-input">
+              </div>
+            
+          </div>
+          <div class="layui-form-item">
+            <label for="person" class="layui-form-label" style="width:130px">
+              <span class="we-red"></span>
+            </label>
+            <button class="layui-btn" lay-filter="add" lay-submit=""  >确定</button>
+          </div>
+      </form>
+    </div>
+		<script src="/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript">
+    	layui.extend({
+				admin: '{/}/static/js/admin'
+			});
+	    layui.use(['form','layer','admin','upload','jquery','laydate','table'], function(){
+	      var form = layui.form,
+	      	admin = layui.admin,
+            layer = layui.layer,
+            table = layui.table,
+            laydate = layui.laydate,
+            upload = layui.upload;
+            var $ = layui.jquery;
+     
+            lay('.date').each(function(){
+                laydate.render({
+                  elem: this,
+                  type: 'datetime',
+                  trigger: 'click',
+                  format:'yyyy-MM-dd HH:mm:ss'
+                });
+              });
+          //监听提交
+          form.on('submit(add)', function(data){
+            console.log(data);
+            //用ajax提交数据
+            $.ajax({
+                url : "/admin/task/taskList/add_taskList",
+                method : "post",
+                data : data.field
+            }).then(function(){
+                layer.alert("添加成功", {icon: 6},function () {
+                // 获得frame索引
+                var index = parent.layer.getFrameIndex(window.name);
+                //关闭当前frame
+                parent.layer.close(index);
+                //将iframe的上一层进行刷新
+                window.parent.location.reload()
+            });
+            })
+            return false;
+          });
+        })  
+    </script>
+    
+  </body>
+
+</html>

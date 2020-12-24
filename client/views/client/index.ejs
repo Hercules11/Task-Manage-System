@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>client</title>
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="/static/css/font.css">
+		<link rel="stylesheet" href="/static/css/weadmin.css">
+		<script type="text/javascript" src="/lib/layui/layui.js" charset="utf-8"></script>
+	</head>
+	<body>
+		<!-- 顶部开始 -->
+		<div class="container">
+			<div class="logo">
+				<a>工作中心</a>
+			</div>		
+			<ul class="layui-nav right" lay-filter="">
+				<li class="layui-nav-item">
+					<a href="javascript:;"><%-username%></a>
+					<dl class="layui-nav-child">
+						<!-- 二级菜单 -->
+						<dd>
+							<a onclick="WeAdminShow('个人信息','/client/user/self_info')">个人信息</a>
+						</dd>
+						<dd>
+							<a class="loginout" href="/login/loginout">退出</a>
+						</dd>
+					</dl>
+				</li>
+			</ul>
+        </div>
+        <div style="padding: 50px; background-color: #F2F2F2;">
+            <div class="layui-row " style="height: 8rem;">
+              <div class="layui-col-xs6 ">
+                <a  href="<%-options[0].firstpath%>" >
+                <i class="layui-icon layui-icon-tabs" style="font-size: 60px; color: #1E9FFF;"></i><br>
+                <%-options[0].first%></a>
+              </div>
+              <div class="layui-col-xs6">
+                <a href="<%-options[0].secondpath%>" >
+                <i class="layui-icon layui-icon-align-left" style="font-size: 60px; color: #1E9FFF;"></i><br>
+                <%-options[0].second%></a>
+              </div>
+            </div>
+            <div class="layui-row " style="height: 8rem;">
+              <div class="layui-col-xs6">
+                <a  href="<%-options[0].thirdpath%>">
+              <i class="layui-icon layui-icon-release" style="font-size: 60px; color: #1E9FFF;"></i><br>
+                <%-options[0].third%></a>
+              </div>
+              <div class="layui-col-xs6" >
+                <a href="<%-options[0].fourthpath%>">
+                <i class="layui-icon layui-icon-log" style="font-size: 60px; color: #1E9FFF;"></i><br>
+                <%-options[0].fourth%></a>
+              </div>
+            </div>
+        </div>
+		<!-- 右侧主体开始 -->
+		<div class="page-content-bg"></div>
+		<!-- 右侧主体结束 -->
+		<!-- 中部结束 -->
+		<!-- 底部开始 -->
+		<div class="footer">
+			<div class="copyright"></div>
+		</div>
+		<!-- 底部结束 -->
+		<script type="text/javascript">
+			layui.config({
+			  base: '/static/js/'
+			  ,version: '101100'
+			}).use('admin');
+			layui.use(['jquery','admin'], function(){
+				var $ = layui.jquery;
+			});
+		</script>
+	</body>
+</html>

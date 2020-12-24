@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>个人信息页面</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/static/css/font.css">
+		<link rel="stylesheet" href="/static/css/weadmin.css">    
+  </head>
+  
+  <body>
+    <div class="weadmin-body" action="/admin/user/self_info" method="POST">
+        <form class="layui-form">
+          <div class="layui-form-item">
+            <input type="text" id="id" name="id" required="" hidden
+            autocomplete="off" value="<%-equip.id%>">
+              <label for="plant" class="layui-form-label">
+                  <span class="we-red">*</span>工厂名称
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="plant" name="plant" required="" lay-verify="required"
+                  autocomplete="off" value="<%-equip.plant%>" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for=work" class="layui-form-label">
+                  <span class="we-red">*</span>车间
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" value="<%-equip.work%>" id=work" name="work" required="" lay-verify="required"
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="name" class="layui-form-label">
+                  <span class="we-red">*</span>设备名称
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" value="<%-equip.name%>" id="name" name="name" required="" lay-verify="required"
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          
+          <div class="layui-form-item">
+            <label for="model" class="layui-form-label">
+                <span class="we-red">*</span>设备型号
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" value="<%-equip.number%>" id="model" name="model" required="" lay-verify="required"
+                autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        
+        <div class="layui-form-item">
+            <label for="number" class="layui-form-label">
+                <span class="we-red">*</span>设备编号
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" value="<%-equip.number%>" id="number" name="number" required="" lay-verify="required"
+                autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        
+        <div class="layui-form-item">
+            <label for="state" class="layui-form-label">
+                <span class="we-red">*</span>设备状态
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" value="<%-equip.state%>" id="state" name="state" required="" lay-verify="required"
+                autocomplete="off" class="layui-input">
+            </div>
+        </div>
+          <div class="layui-form-item">
+              <label for="L_repass" class="layui-form-label">
+              </label>
+              <button  class="layui-btn" lay-filter="add" lay-submit="">
+                  确认
+              </button>
+          </div>
+      </form>
+    </div>
+		<script src="/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript">
+    	layui.extend({
+				admin: '{/}/static/js/admin'
+			});
+	    layui.use(['form','layer','admin','upload','jquery'], function(){
+	      var form = layui.form,
+	      	admin = layui.admin,
+            layer = layui.layer,
+            upload = layui.upload;
+            var $ = layui.jquery
+          
+          //监听提交
+          form.on('submit(add)', function(data){
+            console.log(data);
+            //发异步，把数据提交给php
+            //用ajax提交数据
+            $.ajax({
+                url : "/admin/equip/equipList/edit_equip",
+                method : "post",
+                data : data.field
+            }).then(function(){
+                layer.alert("修改成功", {icon: 6},function () {
+                // 获得frame索引
+                var index = parent.layer.getFrameIndex(window.name);
+                //关闭当前frame
+                parent.layer.close(index);
+                //将iframe的上一层进行刷新
+                window.parent.location.reload()
+            });
+            })
+            
+            return false;
+          });
+          //执行实例,绑定按钮元素
+          var uploadInst = upload.render({
+                elem: '#img_file' //绑定元素
+                ,url: '/admin/user/selfImgUpload', //上传接口,接收图片的位置
+                field:"img_file",
+                done: function(res){
+                //上传完毕回调
+                    console.log(res)
+                    $('#img').attr('src',res.imgUrl)
+                }
+                ,error: function(){
+                //请求异常回调
+                }
+            });
+          
+        });
+    </script>
+  </body>
+
+</html>

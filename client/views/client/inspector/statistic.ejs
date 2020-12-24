@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>statistic</title>
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="/static/css/font.css">
+		<link rel="stylesheet" href="/static/css/weadmin.css">
+        <script type="text/javascript" src="/lib/layui/layui.js" charset="utf-8"></script>
+        <script src="//cdn.bootcss.com/echarts/4.0.2/echarts.min.js"></script>        
+	</head>
+
+	<body>
+		<!-- 顶部开始 -->
+		<div class="container">
+			<div class="logo">
+					<a  href="/client" >
+						<i class="layui-icon layui-icon-left" style="font-size: 25px; color: #ffffff;"></i><br>
+					</a>
+			</div>		
+			<ul class="layui-nav right" lay-filter="">
+				<li class="layui-nav-item">
+					<a style="font-size: 18px;">统计数据一览</a>
+				</li>
+			</ul>
+		</div>
+        <div style="padding: 20px; background-color: #F2F2F2;">
+            <form class="layui-form">
+                <div style="margin-bottom:15px">
+                    <a style="font-size: 15px;"> 请选择日期: </a>
+                    <div class="layui-inline">
+                        <input type="text" class="layui-input" value="" id="test3" name="_date">
+                    </div>
+                    <span class="layui-word-aux" id="test4"></span>
+                </div>    
+                    
+                <div class="layui-form-item">
+                    <label class="layui-form-label" style="padding-left: 0px;padding-right: 0px; width: 84px;">任务计划名称:</label>
+                    <div class="layui-input-inline">
+                      <select name="task_name" lay-verify="required" lay-search="">
+                        <option value="">直接选择</option>
+                        <% for(var i=0;i<options.length;i++) { %>
+                        <option value="<%-options[i].name%>"><%-options[i].name%></options.length;i++>
+                        <% } %>
+                      </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="ensure" class="layui-form-label" >
+                    </label>
+                    <button  class="layui-btn" lay-filter="add" lay-submit="">
+                        确认
+                    </button>
+            </div>
+            </form>
+		</div>
+		<div style="font-size: 15px;"><strong>维护任务执行人: </strong></div>
+        <div id="main" style="width: 350px;height:350px;"></div>        
+		<div class="page-content-bg"></div>
+		<!-- 右侧主体结束 -->
+		<!-- 中部结束 -->
+		<!-- 底部开始 -->
+		<div class="footer">
+			<div class="copyright"></div>
+		</div>
+        <!-- 底部结束 注释写在这里，引入echartsjs代码-->
+        
+        <script type="text/javascript">
+                // 基于准备好的dom，初始化echarts实例
+                var myChart = echarts.init(document.getElementById('main'));
+                
+			layui.config({
+			  base: '/static/js/'
+			  ,version: '101100'
+			}).use('admin');
+			layui.use(['admin','util', 'laydate', 'layer','form'], function(){
+                var $ = layui.$
+                ,admin = layui.admin
+                ,laydate = layui.laydate
+                ,util = layui.util
+                ,form = layui.form
+                ,layer = layui.layer;  
+                
+                //某个时间在当前时间的多久前
+                var setTimeAgo = function(y, M, d, H, m, s){
+                    var str = util.timeAgo(new Date(y, M||0, d||1, H||0, m||0, s||0));
+                    lay('#test4').html(str);
+                };
+                laydate.render({
+                    elem: '#test3'
+                    ,type: 'datetime'
+                    ,done: function(value, date){
+                    setTimeAgo(date.year, date.month - 1, date.date, date.hours, date.minutes, date.seconds);
+                    }
+                });             
+            
+                //发送时间和计划名称数据
+                          //监听提交,正则字符串直接搜素即可
+          form.on('submit(add)', function(value){
+            $.ajax({
+                url : "/client/role/inspector/stat/data_view",
+                method : "post",
+                data : value.field,
+                dataType : "json",
+                success : function(data){
+                // 指定图表的配置项和数据
+                var option = {
+							color: ['#3398DB'],
+							title: {
+								text: data.person,
+								left: 'left'
+							},
+                            tooltip: {
+                                trigger: 'axis',
+                                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                                }
+                            },
+                            grid: {
+                                left: '3%',
+                                right: '4%',
+                                bottom: '3%',
+                                containLabel: true
+                            },
+                            xAxis: [
+                                {
+                                    type: 'category',
+                                    axisLabel:{interval: 0},
+                                    data: data._time,
+                                    axisTick: {
+                                        alignWithLabel: true
+                                    }
+                                }
+                            ],
+                            yAxis: [
+                                {
+                                    type: 'value'
+                                }
+                            ],
+                            series: [
+                                {
+                                    name: '任务得分',
+                                    type: 'bar',
+                                    barWidth: '60%',
+                                    data: data.scores
+                                }
+                            ]
+                        };
+                    // 使用刚指定的配置项和数据显示图表。
+                    myChart.setOption(option);
+                }
+            }).then(function(){				
+                    //提示层
+                    layer.msg('获取数据成功');
+			})            
+            return false;
+		  });
+            });
+  
+
+        </script>
+	</body>
+</html>

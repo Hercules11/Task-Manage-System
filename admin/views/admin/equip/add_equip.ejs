@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>设备基础信息页面</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/static/css/font.css">
+		<link rel="stylesheet" href="/static/css/weadmin.css">    
+  </head>
+  
+  <body>
+    <div class="weadmin-body" action="/admin/equip/equipList/add_equip" method="POST">
+        <form class="layui-form">            
+          <div class="layui-form-item">
+              <label for="plant" class="layui-form-label">
+                  <span class="we-red">*</span>工厂名称
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="plant" name="plant" required="" lay-verify="required"
+                  autocomplete="off" value="" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+            <label for="work" class="layui-form-label">
+                <span class="we-red">*</span>车间
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="work" name="work" required="" lay-verify="required"
+                autocomplete="off" value="" class="layui-input">
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <label for="name" class="layui-form-label">
+                <span class="we-red">*</span>设备名称
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="name" name="name" required="" lay-verify="required"
+                autocomplete="off" value="" class="layui-input">
+            </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="model" class="layui-form-label">
+                  <span class="we-red">*</span>设备型号
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="model" name="model" required="" lay-verify="required"
+                  autocomplete="off" value="" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+            <label for="number" class="layui-form-label">
+                <span class="we-red">*</span>设备编号
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="number" name="number" required="" lay-verify="required"
+                autocomplete="off" value="" class="layui-input">
+            </div>
+          </div>
+        <div class="layui-form-item">
+          <label for="state" class="layui-form-label">
+              <span class="we-red">*</span>设备状态
+          </label>
+          <div class="layui-input-inline">
+              <input type="text" id="state" name="state" required="" lay-verify="required"
+              autocomplete="off" value="" class="layui-input">
+          </div>
+        </div>
+          <div class="layui-form-item">
+              <label for="L_repass" class="layui-form-label">
+              </label>
+              <button  class="layui-btn" lay-filter="add" lay-submit="">
+                  确认
+              </button>
+          </div>
+      </form>
+    </div>
+		<script src="/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript">
+    	layui.extend({
+				admin: '{/}/static/js/admin'
+			});
+	    layui.use(['form','layer','admin','upload','jquery','laydate'], function(){
+	      var form = layui.form,
+	      	admin = layui.admin,
+            layer = layui.layer,
+            laydate = layui.laydate,
+            upload = layui.upload;
+            var $ = layui.jquery;
+
+            // laydate.render({
+            // elem: '#_date', //指定元素
+            // type: 'date',
+            // trigger: 'click'
+            // });
+          //监听提交
+          form.on('submit(add)', function(data){
+            console.log(data);
+            //发异步，把数据提交给php
+            //用ajax提交数据
+            $.ajax({
+                url : "/admin/equip/equipList/add_equip",
+                method : "post",
+                data : data.field
+            }).then(function(){
+                layer.alert("添加成功", {icon: 6},function () {
+                // 获得frame索引
+                var index = parent.layer.getFrameIndex(window.name);
+                //关闭当前frame
+                parent.layer.close(index);
+                //将iframe的上一层进行刷新
+                window.parent.location.reload()
+            });
+            })
+            return false;
+          });
+        })  
+    </script>
+    
+  </body>
+
+</html>
