@@ -1,6 +1,6 @@
-一个前后端分离项目， 管理每天的任务分配
+一个前后端分离项目， 管理每天的任务派发
 
-用到的技术栈有， 前端：[LayUI](https://www.layui.com/)， 后端：[Express](https://expressjs.com/zh-cn/)
+用到的技术栈， 前端：[LayUI](https://www.layui.com/)， 后端：[Express](https://expressjs.com/zh-cn/)
 
 教程参考：
 
