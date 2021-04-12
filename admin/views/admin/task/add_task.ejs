@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  
+
   <head>
     <meta charset="UTF-8">
     <title>任务信息页面</title>
@@ -8,14 +8,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" href="/static/css/font.css">
-		<link rel="stylesheet" href="/static/css/weadmin.css">    
+		<link rel="stylesheet" href="/static/css/weadmin.css">
   </head>
-  
+
   <body>
     <div class="weadmin-body" action="/admin/task/taskList/add_taskList" method="POST">
-        <form class="layui-form">            
+        <form class="layui-form">
           <div class="layui-form-item">
-            
               <label for="name" class="layui-form-label" style="width:130px">
                   <span class="we-red">*</span>计划名称
               </label>
@@ -23,8 +22,8 @@
                   <input type="text" id="name" name="name" required="" lay-verify="required"
                   autocomplete="off" value="" class="layui-input">
               </div>
-            
-            
+
+
               <label for="start" class="layui-form-label" style="width:130px">
                 <span class="we-red">*</span>计划开始时间
               </label>
@@ -32,10 +31,10 @@
                 <input type="text" id="start" name="start" required="" lay-verify="required"
                 autocomplete="off" value="" class="layui-input date">
               </div>
-            
+
           </div>
           <div class="layui-form-item">
-            
+
               <label for="end" class="layui-form-label" style="width:130px">
                 <span class="we-red">*</span>计划结束时间
               </label>
@@ -43,8 +42,8 @@
                 <input type="text" id="end" name="end" required="" lay-verify="required"
                 autocomplete="off" value="" class="layui-input date">
               </div>
-            
-            
+
+
               <label for="init" class="layui-form-label" style="width:130px">
                 <span class="we-red">*</span>更新时间
               </label>
@@ -52,10 +51,10 @@
                 <input type="text" id="init" name="init" required="" lay-verify="required"
                 autocomplete="off" value="" class="layui-input date">
               </div>
-            
+
           </div>
-          <div class="layui-form-item">          
-           
+          <div class="layui-form-item">
+
               <label for="person" class="layui-form-label" style="width:130px">
                 <span class="we-red">*</span>实施人员
               </label>
@@ -63,7 +62,7 @@
                 <input type="text" id="person" name="person" required="" lay-verify="required"
                 autocomplete="off" value="" class="layui-input">
               </div>
-            
+
           </div>
           <div class="layui-form-item">
             <label for="person" class="layui-form-label" style="width:130px">
@@ -86,7 +85,7 @@
             laydate = layui.laydate,
             upload = layui.upload;
             var $ = layui.jquery;
-     
+
             lay('.date').each(function(){
                 laydate.render({
                   elem: this,
@@ -115,9 +114,9 @@
             })
             return false;
           });
-        })  
+        })
     </script>
-    
+
   </body>
 
 </html>

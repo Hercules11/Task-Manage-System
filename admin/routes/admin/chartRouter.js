@@ -4,10 +4,9 @@ var router = express.Router();
 var sqlQuery = require('../../module/Mysql')
 
 
-/* GET users listing. */ 
+/* GET users listing. */
 router.get('/', function(req, res, next) {
   res.send('数据报表');
-  
 });
 
 router.get('/chart',async function(req, res, next){
@@ -30,8 +29,6 @@ router.get('/chart',async function(req, res, next){
     // console.log(options)
     res.render('admin/chart/chart.ejs',{options})
 });
-
-
 
 
 module.exports = router;

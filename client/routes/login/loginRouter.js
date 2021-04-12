@@ -37,20 +37,10 @@ router.post('/',async (req,res)=>{
     // }
     if(result.length==0){
         //登录失败
-        res.render('info/info',{
-            title:"登录失败",
-            content:"用户或密码错误",
-            href:"/login",
-            hrefTxt:"登录页"
-        })
+        res.send("用户名或密码错误!");
     }else{
         req.session.username = username;
-        res.render('info/info',{
-            title:"登录成功",
-            content:"立即跳转至主页面",
-            href:"/client",
-            hrefTxt:"主页"
-        })
+        res.redirect('/client');
     }
 })
 

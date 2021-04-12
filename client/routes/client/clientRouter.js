@@ -9,13 +9,7 @@ var roleRouter = require('./roleRouter')
 function permission(req,res, next){
   if(req.session.username==undefined){
     //未登录，返回登录页
-      res.render('info/info',{
-        title:"未登录",
-        content:"请重新登录，即将进入登录页",
-        href:"/login",
-        hrefTxt:"登录页"
-        
-      })
+    res.send("用户名或密码错误");
   }else{
     //正常登录
     next()
@@ -31,7 +25,7 @@ router.get('/', permission, async function(req, res, next) {
   let options = JSON.parse(options1)
 // console.log(options)
 // console.log(options[0])
-  res.render('client/index.ejs',{username: req.session.username,options})
+  res.render('client/index.ejs',{username: req.session.username, options})
 });
 
 router.use('/user',userRouter)

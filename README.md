@@ -1,6 +1,4 @@
-一个前后端分离项目， 管理每天的任务派发
-
-用到的技术栈， 前端：[LayUI](https://www.layui.com/)， 后端：[Express](https://expressjs.com/zh-cn/)
+基于 Express 的服务器端 Web 应用，使用 ejs 模板引擎和 LayUI 构建页面
 
 教程参考：
 

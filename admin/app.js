@@ -41,9 +41,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 //后台路由
 app.use('/admin', adminRouter);
-
 //登录模块
-app.use('/rl',loginRouter);
+app.use('/login',loginRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

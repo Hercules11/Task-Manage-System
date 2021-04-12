@@ -24,8 +24,8 @@
 			<div class="left_open">
 				<!-- <i title="展开左侧栏" class="iconfont">&#xe699;</i> -->
 				<i title="展开左侧栏" class="layui-icon layui-icon-shrink-right"></i>
-				
-			</div>			
+
+			</div>
 			<ul class="layui-nav right" lay-filter="">
 				<li class="layui-nav-item">
 					<a href="javascript:;"><%-username%></a>
@@ -35,7 +35,7 @@
 							<a onclick="WeAdminShow('个人信息','/admin/user/self_info')">个人信息</a>
 						</dd>
 						<dd>
-							<a class="loginout" href="/rl/loginout">退出</a>
+							<a class="loginout" href="/login/loginout">退出</a>
 						</dd>
 					</dl>
 				</li>
@@ -155,7 +155,7 @@
 									<i class="iconfont">&#xe6a7;</i>
 									<cite>数据报表</cite>
 								</a>
-							</li>						
+							</li>
 						</ul>
 					</li>
 					<li>
@@ -170,7 +170,7 @@
 									<i class="iconfont">&#xe6a7;</i>
 									<cite>生成二维码</cite>
 								</a>
-							</li>						
+							</li>
 						</ul>
 					</li>
 				</ul>
@@ -182,11 +182,11 @@
 		<div class="page-content">
 			<div class="layui-tab tab" lay-filter="wenav_tab" id="WeTabTip" lay-allowclose="true">
 				<ul class="layui-tab-title" id="tabName">
-					<li></li>
+					<li>信息总览</li>
 				</ul>
 				<div class="layui-tab-content">
 					<div class="layui-tab-item layui-show">
-						<iframe src='' frameborder="0" scrolling="yes" class="weIframe"></iframe>
+						<iframe src='/admin/chart/chart' frameborder="0" scrolling="yes" class="weIframe"></iframe>
 					</div>
 				</div>
 			</div>
@@ -207,7 +207,7 @@
 			}).use('admin');
 			layui.use(['jquery','admin'], function(){
 				var $ = layui.jquery;
-			
+
 			});
 
 		</script>

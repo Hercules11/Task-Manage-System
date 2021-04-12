@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  
+
   <head>
     <meta charset="UTF-8">
     <title>个人信息页面</title>
@@ -8,9 +8,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" href="/static/css/font.css">
-		<link rel="stylesheet" href="/static/css/weadmin.css">    
+		<link rel="stylesheet" href="/static/css/weadmin.css">
   </head>
-  
+
   <body>
     <div class="weadmin-body" action="/admin/user/userList/add_user" method="POST">
         <form class="layui-form">
@@ -19,7 +19,6 @@
                 <div class="layui-input-inline">
                     <img id="img" style="width:100px; height:100px;" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1588328602857&di=2789e9bff8e90dbe4559bcf06453a22f&imgtype=0&src=http%3A%2F%2Fpic.90sjimg.com%2Fdesign%2F00%2F67%2F59%2F63%2F58e89bee922a2.png" alt="">
                 </div>
-               
             </div>
           <div class="layui-form-item">
               <label for="username" class="layui-form-label">
@@ -75,14 +74,14 @@
           <div class="layui-form-item">
             <label class="layui-form-label"><span class="we-red">*</span>角色</label>
             <div class="layui-input-block">
-              <%for(let i=0;i<role.length;i++){ %>  
-                      <input type="radio" name="role_id" 
-                      value="<%-role[i].id%>" 
-                      lay-skin="primary" 
-                      title="<%-role[i].role_name%>"                      
+              <%for(let i=0;i<role.length;i++){ %>
+                      <input type="radio" name="role_id"
+                      value="<%-role[i].id%>"
+                      lay-skin="primary"
+                      title="<%-role[i].role_name%>"
                       >
               <%}%>
-              
+
             </div>
         </div>
         <div class="layui-form-item">
@@ -116,7 +115,7 @@
             layer = layui.layer,
             upload = layui.upload;
             var $ = layui.jquery
-            
+
           //自定义验证规则
           form.verify({
             nikename: function(value){
@@ -151,7 +150,7 @@
                 window.parent.location.reload()
             });
             })
-            
+
             return false;
           });
           //执行实例,绑定按钮元素
@@ -170,7 +169,7 @@
                 //请求异常回调
                 }
             });
-          
+
         });
     </script>
   </body>

@@ -2,13 +2,12 @@ let mysql = require('mysql')
 
 let options = {
     host:"localhost",
-    //port:"3306",//可选，默认式3306
+    //port:"3306",//可选，默认3306
     user:"root",
     password:"123fzw",
     database:"project",
     timezone: "08:00"
 }
-
 
 let con = mysql.createConnection(options);
 
